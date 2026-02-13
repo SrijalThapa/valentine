@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Valentine 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    color:white;
+    overflow:hidden;
+}
+
+/* Floating container */
+#love-container{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+}
+
+.floating{
+    position:absolute;
+    font-size:22px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    0%{
+        transform:translateY(-10vh) rotate(0deg);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+/* Card */
+.card{
+    width:92%;
+    max-width:420px;
+    height:520px;
+    perspective:1500px;
+    position:relative;
+    z-index:2;
+}
+
+.card-inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 1.2s ease;
+}
+
+.card.open .card-inner{
+    transform:rotateY(180deg);
+}
+
+.card-front, .card-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Front */
+.card-front{
+    background:linear-gradient(135deg,#ff4d6d,#c9184a);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    cursor:pointer;
+}
+
+.card-front h1{
+    font-size:22px;
+}
+
+/* Back */
+.card-back{
+    background:rgba(0,0,0,0.9);
+    transform:rotateY(180deg);
+    padding:15px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.card-back h2{
+    text-align:center;
+    color:#ff4d6d;
+    margin-bottom:10px;
+}
+
+.card-back p{
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:10px;
+}
+
+/* Gallery */
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin:10px 0;
+}
+
+.gallery img{
+    width:100%;
+    height:100px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+/* Note */
+.note{
+    text-align:center;
+    font-size:14px;
+    line-height:1.6;
+    margin-top:10px;
+}
+
+/* Responsive */
+@media(max-width:480px){
+    .card{height:480px;}
+    .gallery img{height:85px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating hearts container -->
+<div id="love-container"></div>
+
+<!-- Music -->
+<audio id="music1" preload="auto">
+    <source src="video.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="music2" preload="auto">
+    <source src="v2.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="card">
+    <div class="card-inner">
+
+        <div class="card-front" onclick="openCard()">
+            <h1>💌 Tap To Open<br>My Valentine Card 💖</h1>
+        </div>
+
+        <div class="card-back">
+            <h2>Happy Valentine’s Day My Love 💕</h2>
+
+            <p>
+                You are my favorite chapter,  
+                my safest place,  
+                and my forever person. 🌹
+            </p>
+
+            <div class="gallery">
+                <img src="v1.jpeg">
+                <img src="v2.jpeg">
+                <img src="v3.jpeg">
+                <img src="v4.jpeg">
+                <img src="v5.jpeg">
+                <img src="v6.jpeg">
+            </div>
+
+            <div class="note">
+                My love,  
+                no matter what happens,  
+                my heart still chooses you every single day.  
+                I want forever with you. 💞
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+let music1 = document.getElementById("music1");
+let music2 = document.getElementById("music2");
+let cardOpened = false;
+
+const emojis = ["💖","💘","💕","💓","💞","😍","🥰","❤️","🌹"];
+
+/* First tap starts intro music */
+document.addEventListener("click", function(){
+    if(!cardOpened){
+        music1.play().catch(()=>{});
+    }
+}, { once: true });
+
+function openCard(){
+    cardOpened = true;
+
+    document.getElementById("card").classList.add("open");
+
+    music1.pause();
+    music1.currentTime = 0;
+    music2.play().catch(()=>{});
+
+    startLoveRain();
+}
+
+/* Create falling hearts + emojis */
+function startLoveRain(){
+    const container = document.getElementById("love-container");
+
+    setInterval(()=>{
+        const span = document.createElement("span");
+        span.classList.add("floating");
+        span.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+
+        span.style.left = Math.random()*100 + "vw";
+        span.style.animationDuration = (3 + Math.random()*3) + "s";
+        span.style.fontSize = (18 + Math.random()*20) + "px";
+
+        container.appendChild(span);
+
+        setTimeout(()=>{
+            span.remove();
+        },6000);
+
+    },300);
+}
+</script>
+
+</body>
+</html>
